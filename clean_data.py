@@ -16,6 +16,17 @@ except LookupError:
 
 '''All of these are functions to normalize the data'''
 
+def remove_between_square_brackets(text):
+    '''uses regex to remove all of the square brackets since the result is a list'''
+    return re.sub('\[[^]]*\]', '', text)
+
+
+def tokenize(text):
+    words = nltk.word_tokenize(text) # puts all of the words into a list
+    return (words)
+
+
+
 def remove_non_ascii(words):
     """Remove non-ASCII characters from list of tokenized words"""
     new_words = []
@@ -35,7 +46,7 @@ def remove_punctuation(words):
     new_words = []
     dirty_characters = "!@#$%^&*()[]{};:,./<>?\|`~-=_+"
     for word in words:
-        if (word not in dirty_characters) and (word != "''" and word != "``") :
+        if (word not in dirty_characters) and (word != "''" and word != "``") and ("'" not in word):
             new_words.append(word)
     return new_words
 
@@ -56,42 +67,23 @@ def lemmatize(words):
         new_words.append(lemmatizer.lemmatize(word)) # lemmatizes the words in the list and adds them to the new list
     return new_words
 
+
+
+def normalize(words):
+    '''Applies all previous functions to isolate nonuseful data'''
+    words = remove_non_ascii(words)
+    words = to_lowercase(words)
+    words = remove_punctuation(words)
+    words = remove_stopwords(words)
+    words = lemmatize(words)
+    return words
+
+
+
 ''' Main program'''
 
 
 def full_clean(string):
-
-    def denoise_text(text):
-
-        def strip_html(text):
-            soup = BeautifulSoup(text, "html.parser")
-            return soup.get_text()
-
-        def remove_between_square_brackets(text):
-            '''uses regex to remove all of the square brackets since the result is a list'''
-            return re.sub('\[[^]]*\]', '', text)
-
-        def replace_contractions(text):
-            return contractions.fix(text)
-
-        text = strip_html(text)
-        text = remove_between_square_brackets(text)
-        return text
-
-
-    def tokenize(text):
-        words = nltk.word_tokenize(text) # puts all of the words into a list
-        return (words)
-
-
-
-    def normalize(words):
-        '''Applies all previous functions to isolate nonuseful data'''
-        words = remove_non_ascii(words)
-        words = to_lowercase(words)
-        words = remove_punctuation(words)
-        words = remove_stopwords(words)
-        words = lemmatize(words)
-        return words
-
-    return normalize(tokenize(denoise_text(string))) # finished cleaned data
+    words = tokenize(remove_between_square_brackets(string))
+    words = normalize(words)
+    return words
