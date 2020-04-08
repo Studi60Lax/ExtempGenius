@@ -3,13 +3,15 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import download
 from nltk import word_tokenize
-
-nltk.download("wordnet")
-nltk.download('punkt')
 from bs4 import BeautifulSoup
 import re
 import string
 import unicodedata
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
+    nltk.download("wordnet")
 
 
 '''All of these are functions to normalize the data'''
