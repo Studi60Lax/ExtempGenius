@@ -35,7 +35,7 @@ def remove_punctuation(words):
     new_words = []
     dirty_characters = "!@#$%^&*()[]{};:,./<>?\|`~-=_+"
     for word in words:
-        if word not in dirty_characters:
+        if (word not in dirty_characters) and (word != "''" and word != "``") :
             new_words.append(word)
     return new_words
 
