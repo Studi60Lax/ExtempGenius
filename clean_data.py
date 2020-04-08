@@ -1,6 +1,8 @@
+import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk import download
+nltk.download("wordnet")
 
 def full_clean(string):
     download('stopwords') # Downloads stopwords list if not already on computer
@@ -13,6 +15,7 @@ def full_clean(string):
         if not word in stop: # Removes stopwords
             cleaned_string += lemmatizer.lemmatize(word) # Lemmatization
             cleaned_string += " "
+
     cleaned_string = cleaned_string.translate ({ord(c): " " for c in "!@#$%^&*()[]{};:,./<>?\|`~-=_+"}) # Replace special chars
 
     return cleaned_string.strip()
