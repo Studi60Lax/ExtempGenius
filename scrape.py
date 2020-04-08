@@ -1,9 +1,12 @@
 from googlesearch import search
 from newspaper import Article
-
+import requests
+from bs4 import BeautifulSoup
 """
 Returns array of the text from the top 10 articles that come up given the search term
 """
+
+
 
 def get_article_text_from_search_term(term):
     articles = []
@@ -14,3 +17,8 @@ def get_article_text_from_search_term(term):
         articles.append(a.text)
 
     return articles
+
+
+article = input("Input query ")
+
+article = get_article_text_from_search_term(article)
