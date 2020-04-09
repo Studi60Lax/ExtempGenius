@@ -78,10 +78,6 @@ def normalize(words):
     words = lemmatize(words)
     return words
 
-
-
-''' Main program'''
-
 def getkeywords(words):
     common = open("common.txt").read().split('\n')
     worddict = {}
@@ -99,11 +95,7 @@ def getkeywords(words):
 
     return top_10
 
-
-
-
-
-
+''' Main program'''
 def full_clean(string):
     words = tokenize(remove_between_square_brackets(string))
     words = normalize(words)
