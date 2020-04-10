@@ -53,6 +53,9 @@ def remove_punctuation(words):
 
 def remove_stopwords(words):
     stop = set(stopwords.words('english'))
+    with open("common.txt") as file:
+        common_words = set(file.read().split('\n'))
+    stop = stop|common_words
     new_words = []
     for word in words:
         if not word in stop:
@@ -79,17 +82,14 @@ def normalize(words):
     return words
 
 def getkeywords(words):
-    common = open("common.txt").read().split('\n')
     worddict = {}
 
     for word in words:
-        if word not in common:
-            if word not in worddict:
-                worddict[word] = 1
-            if word in worddict:
-                worddict[word] += 1
-        elif word in common:
-            continue
+        if word not in worddict:
+            worddict[word] = 1
+        if word in worddict:
+            worddict[word] += 1
+        
     word_frequency = sorted(worddict.items(),key = lambda kv:(kv[1], kv[0]), reverse = True)[0:]
     top_10 = word_frequency[0:10]
 

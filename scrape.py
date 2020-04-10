@@ -21,4 +21,3 @@ def get_article_text_from_search_term(term):
 article = input("Input query ")
 
 article = get_article_text_from_search_term(article)
-print(article)
