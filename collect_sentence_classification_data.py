@@ -39,9 +39,10 @@ for g in gram_sentences:
         print(str(inc) + ")")
         print(sent)
         print(g)
-        choice = input("Event [1]\nActor [2]\nImpact [3]\nBad Data [4]\n>")
-        choices = ['event', 'actor', 'impact', 'ignore']
+        choice = input("Event [1]\nActor [2]\nImpact [3]\nBad Data [4]\nDon't Know [5]>")
+        choices = ['event', 'actor', 'impact', 'ignore', 'idk']
         choice = choices[int(choice)-1]
-        with open('./sentence_classification_data.csv','a') as file:
-            file.write(choice + ',' + g + ',' + sent + '\n')
+        if choice != "idk":
+            with open('./sentence_classification_data.csv','a') as file:
+                file.write(choice + ',' + g + ',' + sent + '\n')
         print('\n')
