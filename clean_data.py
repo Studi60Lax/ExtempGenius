@@ -78,12 +78,26 @@ def normalize(words):
     words = lemmatize(words)
     return words
 
+def getkeywords(words):
+    common = open("common.txt").read().split('\n')
+    worddict = {}
 
+    for word in words:
+        if word not in common:
+            if word not in worddict:
+                worddict[word] = 1
+            if word in worddict:
+                worddict[word] += 1
+        elif word in common:
+            continue
+    word_frequency = sorted(worddict.items(),key = lambda kv:(kv[1], kv[0]), reverse = True)[0:]
+    top_10 = word_frequency[0:10]
+
+    return top_10
 
 ''' Main program'''
-
-
 def full_clean(string):
     words = tokenize(remove_between_square_brackets(string))
     words = normalize(words)
+    words = getkeywords(words)
     return words
