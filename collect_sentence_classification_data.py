@@ -32,13 +32,16 @@ for g in all_grams_only_text:
                 gram_sentences[g].append(csents[i])
             i += 1
 
+inc = 0
 for g in gram_sentences:
     for sent in gram_sentences[g]:
+        inc += 1
+        print(str(inc) + ")")
         print(sent)
-        print()
-        choice = input("Event [1] Actor [2] Impact [3] Bad Data [4]\n>")
+        print(g)
+        choice = input("Event [1]\nActor [2]\nImpact [3]\nBad Data [4]\n>")
         choices = ['event', 'actor', 'impact', 'ignore']
         choice = choices[int(choice)-1]
         with open('./sentence_classification_data.csv','a') as file:
-            file.write(choice + ',' + sent + '\n')
+            file.write(choice + ',' + g + ',' + sent + '\n')
         print('\n')
