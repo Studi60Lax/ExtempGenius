@@ -42,25 +42,3 @@ for g in gram_sentences:
         with open('./sentence_classification_data.csv','a') as file:
             file.write(choice + ',' + sent + '\n')
         print('\n')
-
-"""
-print("Generating N-Grams.\n")
-
-print("Top 10 1-grams")
-print(evaluate_data.get_top_n_grams(cleaned_corpus, 1, 10))
-print("\n")
-
-print("Top 10 2-grams")
-print(evaluate_data.get_top_n_grams(cleaned_corpus, 2, 10))
-print("\n")
-
-
-print("Top 10 3-grams")
-print(evaluate_data.get_top_n_grams(cleaned_corpus, 3, 10))
-print("\n")
-
-
-print("Top 10 4-grams")
-print(evaluate_data.get_top_n_grams(cleaned_corpus, 4, 10))
-print("\n")
-"""
