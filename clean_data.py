@@ -89,7 +89,7 @@ def getkeywords(words):
             worddict[word] = 1
         if word in worddict:
             worddict[word] += 1
-        
+
     word_frequency = sorted(worddict.items(),key = lambda kv:(kv[1], kv[0]), reverse = True)[0:]
     top_10 = word_frequency[0:10]
 
@@ -99,5 +99,4 @@ def getkeywords(words):
 def full_clean(string):
     words = tokenize(remove_between_square_brackets(string))
     words = normalize(words)
-    words = getkeywords(words)
     return words
