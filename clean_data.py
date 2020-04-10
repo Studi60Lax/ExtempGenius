@@ -96,7 +96,10 @@ def getkeywords(words):
     return top_10
 
 ''' Main program'''
-def full_clean(string):
-    words = tokenize(remove_between_square_brackets(string))
-    words = normalize(words)
-    return words
+def full_clean(corpus):
+    clean_corpus = []
+    for c in corpus:
+        words = tokenize(remove_between_square_brackets(c))
+        words = normalize(words)
+        clean_corpus.append(' '.join(words))
+    return clean_corpus
