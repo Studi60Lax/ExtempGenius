@@ -38,8 +38,10 @@ for g in gram_sentences:
         inc += 1
         print(str(inc) + ")")
         print(sent)
+        print()
         print(g)
-        choice = input("Event [1]\nActor [2]\nImpact [3]\nBad Data [4]\nDon't Know [5]>")
+        print()
+        choice = input("Event [1]\nActor [2]\nImpact [3]\nBad Data [4]\nDon't Know [5]\n>")
         choices = ['event', 'actor', 'impact', 'ignore', 'idk']
         choice = choices[int(choice)-1]
         if choice != "idk":
