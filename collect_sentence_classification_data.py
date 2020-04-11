@@ -41,7 +41,7 @@ for g in gram_sentences:
         print()
         print(g)
         print()
-        choice = input("Event [1]\nActor [2]\nImpact [3]\nLocation [4]\nBad Data [5]\nDon't Know [6]\n>")
+        choice = input("Event [1]\nActor [2]\nImpact [3]\nLocation [4]\nNone of the above [5]\nDon't Know [6]\n>")
         choices = ['event', 'actor', 'impact', 'location', 'ignore', 'idk']
         choice = choices[int(choice)-1]
         if choice != "idk":
