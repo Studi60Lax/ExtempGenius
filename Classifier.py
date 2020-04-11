@@ -5,7 +5,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.ensemble import GradientBoostingClassifier
 import tensorflow as tf
 import tensorflow_hub as hub
-embed = hub.Module("https://tfhub.dev/google/universal-sentence-encoder/1")
+embed = hub.Module("https://tfhub.dev/google/universal-sentence-encoder/4")
 
 
 
@@ -20,9 +20,9 @@ x = train_data.drop(labels = "Type", axis = 1)
 x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state = 12)
 
 
-scaler = MinMaxScaler()
-x_train = scaler.fit_transform(x_train)
-x_test = scaler.transform(x_test)
+# scaler = MinMaxScaler()
+# x_train = scaler.fit_transform(x_train)
+# x_test = scaler.transform(x_test)
 
 
 lr_list = [0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1]
