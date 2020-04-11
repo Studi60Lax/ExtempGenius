@@ -16,7 +16,7 @@ grams1 = evaluate_data.get_top_n_grams(cleaned_corpus, 1, 10, remove_phrases=gra
 
 
 print("Top 10 1-grams")
-print(evaluate_data.get_top_n_grams(grams1)
+print(grams1)
 print("\n")
 
 print("Top 10 2-grams")
