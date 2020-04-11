@@ -9,21 +9,26 @@ print("Cleaning.")
 cleaned_corpus = clean_data.full_clean(articles)
 
 print("Generating N-Grams.\n")
+grams4 = evaluate_data.get_top_n_grams(cleaned_corpus, 4, 10)
+grams3 = evaluate_data.get_top_n_grams(cleaned_corpus, 3, 10, remove_phrases=grams4)
+grams2 = evaluate_data.get_top_n_grams(cleaned_corpus, 2, 10, remove_phrases=grams4+grams3)
+grams1 = evaluate_data.get_top_n_grams(cleaned_corpus, 1, 10, remove_phrases=grams4+grams3+grams2)
+
 
 print("Top 10 1-grams")
-print(evaluate_data.get_top_n_grams(cleaned_corpus, 1, 10))
+print(evaluate_data.get_top_n_grams(grams1)
 print("\n")
 
 print("Top 10 2-grams")
-print(evaluate_data.get_top_n_grams(cleaned_corpus, 2, 10))
+print(grams2)
 print("\n")
 
 
 print("Top 10 3-grams")
-print(evaluate_data.get_top_n_grams(cleaned_corpus, 3, 10))
+print(grams3)
 print("\n")
 
 
 print("Top 10 4-grams")
-print(evaluate_data.get_top_n_grams(cleaned_corpus, 4, 10))
+print(grams4)
 print("\n")

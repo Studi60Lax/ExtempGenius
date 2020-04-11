@@ -8,20 +8,17 @@ articles = scrape.get_articles_text_from_search_term(term)
 print("Cleaning.")
 cleaned_corpus = clean_data.full_clean(articles)
 
-grams1 = evaluate_data.get_top_n_grams(cleaned_corpus, 1, 4)
-grams2 = evaluate_data.get_top_n_grams(cleaned_corpus, 2, 4)
-grams3 = evaluate_data.get_top_n_grams(cleaned_corpus, 3, 4)
 grams4 = evaluate_data.get_top_n_grams(cleaned_corpus, 4, 4)
+grams3 = evaluate_data.get_top_n_grams(cleaned_corpus, 3, 4, remove_phrases=grams4)
+grams2 = evaluate_data.get_top_n_grams(cleaned_corpus, 2, 4, remove_phrases=grams4 + grams3)
+grams1 = evaluate_data.get_top_n_grams(cleaned_corpus, 1, 4, remove_phrases=grams4 + grams3 + grams2)
+
 
 all_grams = grams1 + grams2 + grams3 + grams4
-all_grams_only_text = []
-
-for g in all_grams:
-    all_grams_only_text.append(g[0])
 
 # Put them into their sentences
 gram_sentences = {}
-for g in all_grams_only_text:
+for g in all_grams:
     gram_sentences[g] = []
     for c in articles:
         csents = clean_data.split_into_sentences(c)
@@ -50,3 +47,4 @@ for g in gram_sentences:
         print('\n')
         if inc % 5 == 0:
             break
+"""
