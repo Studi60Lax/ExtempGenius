@@ -42,9 +42,8 @@ for g in gram_sentences:
         choices = ['event', 'actor', 'impact', 'location', 'ignore', 'idk']
         choice = choices[int(choice)-1]
         if choice != "idk":
-            with open('./sentence_classification_data.csv','a') as file:
+            with open('./sentence_classification_data.csv','a', encoding = 'utf-8') as file:
                 file.write(choice + ',' + g + ',' + sent + '\n')
         print('\n')
         if inc % 5 == 0:
             break
-
