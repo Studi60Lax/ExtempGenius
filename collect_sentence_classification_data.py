@@ -47,4 +47,4 @@ for g in gram_sentences:
         print('\n')
         if inc % 5 == 0:
             break
-"""
+
