@@ -43,7 +43,8 @@ for g in gram_sentences:
         choice = choices[int(choice)-1]
         if choice != "idk":
             with open('./sentence_classification_data.csv','a', encoding = 'utf-8') as file:
-                file.write(choice + ',' + g + ',' + sent + '\n')
+                cleansent = clean_data.remove_punctuation(sent)
+                file.write(choice + ',' + g + ',' + cleansent + '\n')
         print('\n')
         if inc % 5 == 0:
             break
