@@ -1,1 +1,6 @@
 keys.py
+tf_cache
+.ipynb_checkpoints
+.git-rewrite
+__pycache__
+large_files.txt
