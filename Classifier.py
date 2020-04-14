@@ -1,54 +1,83 @@
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
+import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.ensemble import GradientBoostingClassifier
-import tensorflow as tf
+from sklearn.preprocessing import LabelEncoder
+import os
 import tensorflow_hub as hub
-embed = hub.Module("https://tfhub.dev/google/universal-sentence-encoder/4")
+from nltk import pos_tag
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.metrics import confusion_matrix, classification_report, percent_accuracy
 
+os.environ['TFHUB_CACHE_DIR'] = './tf_cache'
+embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder/4")
+label_enc = LabelEncoder()
 
+data = pd.read_csv('sentence_classification_data.csv', header=0)
+data = data.dropna()
+X = data[['Sentence', 'Gram']]
+y = data['Type']
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.05,random_state = 1)
 
-data = pd.read_csv("sentence_classification_data.csv", names = ['Type','Gram','Sentence'])
-data.head()
-data['Gram'] = data['Gram'].apply(lambda x: embed(x))
-data['Sentence'] = data['Sentence'].apply(lambda x: embed(x))
+def process_data(X):
+    sentences = X['Sentence'].tolist()
+    grams = X['Gram'].tolist()
 
+    features = []
 
-y = data.Type
-x = train_data.drop(labels = "Type", axis = 1)
-x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state = 12)
+    for i in range(len(sentences)):
+        phrase = grams[i]
 
+        phrase_parts_of_speech = pos_tag(phrase)
+        phrase_only_pos = []
+        for p in phrase_parts_of_speech:
+            phrase_only_pos.append(p[1])
 
-# scaler = MinMaxScaler()
-# x_train = scaler.fit_transform(x_train)
-# x_test = scaler.transform(x_test)
+        sentence = sentences[i]
+        sentence_parts_of_speech = pos_tag(sentence)
+        sentence_only_pos = []
+        for p in sentence_parts_of_speech:
+            sentence_only_pos.append(p[1])
 
+        phrase_only_pos = ' '.join(phrase_only_pos)
+        sentence_only_pos = ' '.join(sentence_only_pos)
 
-lr_list = [0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1]
-for learning_rate in lr_list:
-    gb_clf = GradientBoostingClassifier(n_estimators=20, learning_rate=learning_rate, max_features=2, max_depth=2, random_state=0)
-    gb_clf.fit(x_train, x_train)
-    print("Learning rate: ", learning_rate)
-    print("Accuracy score (training): {0:.2f}".format(gb_clf.score(x_train, y_train)))
-    print("Accuracy score (validation): {0:.2f}".format(gb_clf.score(x_test, y_test)))
+        features.append([phrase, sentence, phrase_only_pos, sentence_only_pos])
 
+    return features
 
-gb_clf2 = GradientBoostingClassifier(n_estimators=20, learning_rate=0.5, max_features=2, max_depth=2, random_state=0)
-gb_clf2.fit(x_train, y_train)
-predictions = gb_clf2.predict(X_val)
+def encode_data(X_processed, y=None):
+    embed_features = []
+
+    for f in X_processed:
+        gram = f[0]
+        sentence = f[1]
+        phrase_pos = f[2]
+        sentence_pos = f[3]
+
+        embeddings = embed([gram, sentence, phrase_pos, sentence_pos])
+        new = np.array([embeddings[0], embeddings[1], embeddings[2], embeddings[3]])
+        embed_features.append(new.flatten()) # We have to flatten because sklearn only supports 1D features :(
+
+    if y.any():
+        y_encoded = label_enc.fit_transform(y)
+
+    return embed_features, y_encoded
+
+clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, random_state=1)
+
+X_train_processed = process_data(X_train)
+X_test_processed = process_data(X_test)
+X_train_final,y_train_final = encode_data(X_train_processed, y_train)
+X_test_final, y_test_final = encode_data(X_test_processed, y_test)
+
+clf.fit(X_train_final, y_train_final)
+preds = clf.predict(X_test_final)
+
+preds_plaintext = label_enc.inverse_transform(preds)
+y_test_plaintext = label_enc.inverse_transform(y_test_final)
 
 print("Confusion Matrix:")
-print(confusion_matrix(y_test, predictions))
+print(confusion_matrix(y_test_plaintext, preds_plaintext))
 
 print("Classification Report")
-print(classification_report(y_test, predictions))
-
-
-
-
-from xgboost import XGBClassifier
-xgb_clf = XGBClassifier()
-xgb_clf.fit(x_train, y_train)
-score = xgb_clf.score(x_test, x_test)
-print(score)
+print(classification_report(y_test_plaintext, preds_plaintext))
